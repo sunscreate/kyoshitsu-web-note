@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /
+Sitemap: https://kyoshitsu-web-note.mixeddumpling32.chatgpt.site/sitemap.xml

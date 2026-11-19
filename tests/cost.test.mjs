@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {calculateCost} from '../assets/cost.mjs';
+const base={months:36,term:12,initialMonthly:1000,renewMonthly:1100,domainFirst:0,domainRenew:1500,setup:0,extrasMonthly:0};
+test('three annual terms include two renewals and two domain renewals',()=>{const r=calculateCost(base);assert.equal(r.total,41400);assert.equal(r.firstPayment,12000);assert.equal(r.monthly,1150);});
+test('two-year horizon with three-year commitment counts entire upfront payment',()=>{const r=calculateCost({...base,months:24,term:36});assert.equal(r.server,36000);assert.equal(r.total,37500);assert.equal(r.paidMonths,36);});
+test('three-year horizon renews two-year term in full',()=>assert.equal(calculateCost({...base,term:24}).server,50400));
+test('free service produces zero',()=>assert.equal(calculateCost({...base,initialMonthly:0,renewMonthly:0,domainRenew:0}).total,0));
+test('setup charged once, extras monthly, first domain once',()=>{const r=calculateCost({...base,months:12,setup:5000,extrasMonthly:200,domainFirst:1000});assert.equal(r.total,20400);assert.equal(r.firstPayment,18000);});
+test('invalid amounts and unsupported periods rejected',()=>{for(const value of [-1,NaN,Infinity,10000001])assert.throws(()=>calculateCost({...base,renewMonthly:value}));assert.throws(()=>calculateCost({...base,term:0}));});
