@@ -28,5 +28,6 @@ await page('/privacy/','プライバシー方針','計算ツールの入力情�
 await writeFile('dist/404.html',layout('ページが見つかりません','指定されたページは見つかりませんでした。','/404.html','<main id="main" class="wrap article"><h1>ページが見つかりません。</h1><p>URLをご確認いただくか、ホームからお探しください。</p><a class="button" href="/">ホームに戻る</a></main>'));
 await writeFile('dist/robots.txt',`User-agent: *\n${settings.public?'Allow: /':'Disallow: /'}\nSitemap: ${origin}/sitemap.xml\n`);
 await writeFile('dist/sitemap.xml',`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map(path=>`<url><loc>${origin}${path}</loc><lastmod>${guides.find(g=>path===`/guides/${g.slug}/`)?.updated||settings.updated}</lastmod></url>`).join('')}</urlset>`);
+await writeFile('dist/sitemap.txt',paths.map(path=>`${origin}${path}`).join('\n')+'\n');
 await writeFile('dist/_headers','/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: SAMEORIGIN\n');
 console.log(`Built ${paths.length} pages; affiliate ads: ${hasAds}; public SEO: ${settings.public}`);

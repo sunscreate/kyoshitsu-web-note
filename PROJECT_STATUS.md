@@ -26,3 +26,11 @@
 - XML名前空間・絶対URL・重複・日付を検証。公開XMLとdistが一致。通常curlとGooglebot UAは200、application/xml。robots許可。手動対策なし。
 - サイトマップ一覧の「取得できませんでした」は未解消。通常のサイトマップ取得と検査ツールは別処理なので、ライブ成功から通常取得成功は断定しない。具体的なサイト側不備が見つからず、コード・セキュリティ設定の推測変更はしていない。
 - Google公式手順に基づく切り分け：https://support.google.com/webmasters/answer/7451001 。再送信済み。次回は通常取得結果を確認。初期整備95%のまま、取得エラー修正完了とはしない。
+
+## サイトマップ代替形式の切り分け（2026-11-21 20:58 JST）
+- build.mjsにUTF-8・1行1絶対URLのsitemap.txt生成を追加。既存XMLと同じ8URLであることを検証。既存XML・robots・セキュリティ設定は保持。
+- ビルド・既存テスト8件合格。Cloudflare本番に17ファイル公開成功。sitemap.txtはHTTP 200、text/plain; charset=utf-8、446バイト。
+- Search Consoleへsitemap.txtを送信し受付確認。再確認時はXML・TXTとも「不明／取得できませんでした／検出0」。形式変更だけでは解消しなかった。未解決。
+- クロール統計（画面の最終更新日11/19）は8リクエスト、ホスト問題なし。404の唯一の例はfavicon.ico（表示日時11/20 14:00）で、サイトマップではなかった。統計の遅延があり現在の全リクエストを網羅する証拠ではない。
+- 根本原因は未特定。Googleライブ検査成功を通常サイトマップ処理成功と混同しない。次の完了条件はSearch Consoleで成功・8URL検出を確認すること。
+- 証跡：operations/sitemap-text-submitted.jpg（Git対象外）。代替形式仕様：https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap
